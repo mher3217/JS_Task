@@ -4,11 +4,6 @@ const socketIO = require('socket.io')
 const http = require('http')
 const events = require('events')
 
-var myEmit = new events.EventEmitter()
-myEmit.on('onclick', function(text){
-  console.log("exav");
-})
-myEmit.emit('topFunction()','aaaaa');
 
 const app = express()
 const server = http.createServer(app)
