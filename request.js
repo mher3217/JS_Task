@@ -56,7 +56,7 @@ app.put('/user_put/:id', (req,res)=>{
 })
 
 app.delete('/user_delete/:id', (req,res)=>{
-  users_tbl[req.params.id] = {  }
+  users_tbl[req.params.id] = null;
   res.send('user_delete!!!');
 })
 
