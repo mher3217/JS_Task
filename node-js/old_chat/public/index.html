@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/css.css">
+		<link rel="stylesheet" type="text/css" href="css/reset.css">
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">	
+	</head>
+	<body>	
+		<script src="js/jquery-3.1.1.min.js"></script>
+		
+		<button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+		
+		<div class="mas_1">
+			<nav  class="menu">
+				<p onclick="myFunction()" class="menu_icon"><i class="fa fa-bars" aria-hidden="true"></i></p>
+				<ul id="m_1" class="drop_menu">
+					<li><p onclick="topFunction_0()">HOME</p></li>
+					<li><p onclick="topFunction_1()"><i class="fa fa-user-o" aria-hidden="true"></i> ABOUT</p></li>
+					<li><p onclick="topFunction_2()"><i class="fa fa-th" aria-hidden="true"></i> PORTFOLIO</p></li>
+					<li><p onclick="topFunction_3()"><i class="fa fa-desktop" aria-hidden="true"></i> CONTACT</p></li>
+					<li id="hide_icon"><p href=""><i class="fa fa-th-large" aria-hidden="true"></i> GET STARTED</p></li>
+					<li id="lupa"><i class="fa fa-search" aria-hidden="true"></i></li>
+				</ul>				
+			</nav>	
+		</div>
+
+		<div class="slyde_show">
+			<div id="logo">
+				<a href="">GET STARTED</a>
+			</div>
+			<p onclick="plusIndex(-1)" class="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i></p>
+			<p onclick="plusIndex(1)" class="next" ><i class="fa fa-arrow-right" aria-hidden="true"></i></p>
+			<img class="slyder_fade" src="img/slayders_/photo_1.jpg"  alt="Some photo" >
+			<img class="slyder_fade" src="img/slayders_/photo_2.jpg"  alt="Some photo" >	
+			<img class="slyder_fade" src="img/slayders_/photo_3.jpg"  alt="Some photo" >	
+			<img class="slyder_fade" src="img/slayders_/photo_4.jpg"  alt="Some photo" >	
+			<img class="slyder_fade" src="img/slayders_/photo_5.jpg"  alt="Some photo" >	
+			<img class="slyder_fade" src="img/slayders_/photo_6.jpg"  alt="Some photo" >
+		</div>
+
+		<div class="middle">
+			<div class="paragraf">
+				<h3>ABOUT ME</h3>
+				<p id="it_1">I love photography</p>
+				<p class="info">We have created a fictional "personal" website/blog, and our fictional character is a hobby photographer. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+				</p>
+			</div>
+			<div class="mas_2">
+				<h3><i class="fa fa-user-o" aria-hidden="true"></i> My Name</h3>
+				<img class="nkar_1" src="img/avatar.jpg"  alt="Some fhoto" width=100% height=90%>
+			</div>
+			<div class="info_1">
+				<p>Welcome to my website. I am lorem ipsum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+				</p>
+			</div>
+			<div class="mas_3">
+				<h3>Im really good at:</h3>
+				<p><i class="fa fa-camera" aria-hidden="true"></i>Photography</p>
+				<div class="prog_contanainer">
+					<div class="contanainer width_1">
+					</div>
+				</div>
+				<p><i class="fa fa-laptop" aria-hidden="true"></i>Web Design</p>
+				<div class="prog_contanainer">
+					<div class="contanainer width_2">
+					</div>
+				</div>				
+				<p><i class="fa fa-picture-o" aria-hidden="true"></i>Phootoshop</p>
+				<div class="prog_contanainer">
+					<div class="contanainer width_3">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="tver">
+			<div class="a_1"><h4><span class="tiv">14+</span><br>Partners</h4></div>
+			<div class="a_1"><h4><span class="tiv">55+</span><br>Projects Done</h4></div>
+			<div class="a_1"><h4><span class="tiv">89+</span><br>Happy Clients</h4></div>
+			<div class="a_1"><h4><span class="tiv">150+</span><br>Meetings</h4></div>
+		</div>
+		
+		<div id="polina"> <!--class="portfolio"-->				
+					<video poster="https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/polina.jpg" id="bgvid" playsinline autoplay muted loop> <!--class="fillWidth"--> 
+						<source src="video/Working.webm" type="video/webm" >
+						<source src="video/Working.mp4" type="video/mp4" > <!--Your browser does not support the video tag. I suggest you upgrade your browser.
+						<source src="video/Writing-Working.Ogg" type="video/webm" />Your browser does not support the video tag. I suggest you upgrade your browser.-->
+					</video>
+			<h2>PORTFOLIO</h2>
+		</div>
+		
+		<div class="my_job">
+			<h3>MY WORK</h3>
+			<h4>Here are some of my latest lorem work ipsum tipsum.<br>Click on the images to make them bigger</h4>
+			<div class="flex_menu">
+				<a href=""><img src="img/p1.jpg" width=220px height=160px></a>
+				<a href=""><img src="img/p2.jpg" width=220px height=160px></a>
+				<a href=""><img src="img/p3.jpg" width=220px height=160px></a>
+				<a href=""><img src="img/p4.jpg" width=220px height=160px></a>
+				<a href=""><img src="img/p5.jpg" width=220px height=160px></a>
+				<a href=""><img src="img/p6.jpg" width=220px height=160px></a>
+				<a href=""><img src="img/p7.jpg" width=220px height=160px></a>
+				<a href=""><img src="img/p8.jpg" width=220px height=160px></a>
+			</div>
+		</div>
+		
+		<div id="shadow">
+			<h5><a href="">LOAD MORE</a></h5>
+		</div>
+		
+		<div class="last_foto">
+			<h5>CONTACT</h5>
+		</div>
+		
+		<div class="contact">
+			<h5>WHERE I WORK</h5>
+			<h6>I'd love your feedback!</h6>
+			<div id="map"></div>
+			<script>
+				function initMap() {
+					map = new google.maps.Map(document.getElementById('map'), {
+					  center: {lat: 40.177200, lng: 44.503490},
+					  zoom: 10
+					});
+				}
+			</script>
+			<script async defer
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZMOau41if07uHYZBJ3tuyZRyOCLOnJOw&callback=initMap">
+			</script>
+
+			<div id="link">
+				<p>
+					<a href=""><i class="fa fa-map-marker f_1" aria-hidden="true"></i></a><span class="adress"> Erevan, Armenia</span>
+					<br><a href=""><i class="fa fa-phone f_1" aria-hidden="true"></i></a><span class="adress"> Phone: +00 151515</span>
+					<br><a href=""><i class="fa fa-envelope f_1" aria-hidden="true"></i></a><span class="adress"> Email: mail@mail.com</span>
+				</p>
+				<p id="text">Swing by for a cup of <i class="fa fa-coffee" aria-hidden="true"></i>, or leave me a note:</p>
+				<form class="Name">
+					<input type="text"  placeholder="Name" name="Name">
+				</form>
+				<form class="Name n_1">
+					<input type="text" name="Email" placeholder="Email">
+				</form>
+				<form class="Mess">
+					<input type="text" name="Message" placeholder="Message">
+				</form>		
+				<div class="send">
+					<p><i class="fa fa-space-shuttle" aria-hidden="true"></i> SEND MESSAGE</p>
+				</div>
+			</div>
+		</div>	
+		
+		<footer class="down">
+			<div id="to_top">
+				<a href=""><i class="fa fa-arrow-up" aria-hidden="true"></i> refresh </a>
+			</div>
+			<a class="icons" href=""><i class="fa fa-facebook" aria-hidden="true"></i></a>	
+			<a class="icons" href=""><i class="fa fa-instagram" aria-hidden="true"></i></a>
+			<a class="icons" href=""><i class="fa fa-snapchat-square" aria-hidden="true"></i></a>
+			<a class="icons" href=""><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
+			<a class="icons" href=""><i class="fa fa-twitter-square" aria-hidden="true"></i></a>
+			<a class="icons" href=""><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+			<p id="final">Powered by <a href="">w3.css</a></p>
+		</footer>
+		<script src="js/js.js"></script>
+		<script src="js/java_1.js">		
+		</script>
+	</body>
+</html>
