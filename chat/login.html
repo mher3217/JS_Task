@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			#login{
+				display:none;
+			}
+			#back{
+				display:none;
+			}
+		</style>
+	</head>
+<body>
+
+	<div>
+		<button id="login_buttom" onclick="Fu_login()" >login</button>
+		<button id="autorize_buttom" onclick="Fu_autorize()" >Autorize</button>
+		
+	</div>
+	
+	<div id="login">
+		<input id="name" type="text" placeholder="Username" ><br>
+		<input id="age" type="text" placeholder="Age" ><br>
+		<button onclick="Fu_login()" id="submit">Send</button>
+		
+	</div>
+	<div id="back">
+		<button onclick="show()">Back</button>
+	</div>
+	<script src="login.js">
+	</script>
+</body>
+</html>
