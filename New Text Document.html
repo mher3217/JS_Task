@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<head>
+	<style>
+		.mystyle {
+			display:none;
+		}
+
+		.newClassName {
+			display:block;
+		}
+	</style>
+</head>
+<body>
+
+
+
+<button id="login_buttom" onclick="login()">Login</button>
+<button id="autorize_buttom" onclick="autorize()">Password</button>
+
+<div id="myDIV" class="mystyle">
+    	<input id="name" type="text" placeholder="Username" >
+		<input id="password" type="text" placeholder="Password" >
+		<button id="submit">Send</button>
+</div>
+
+<div id="autorize" class="mystyle">
+    	<input id="a_name" type="text" placeholder="Username" >
+    	<input id="password" type="text" placeholder="Password" >
+		<input id="a_age" type="text" placeholder="Age" >
+		<button id="submit">Send</button>
+</div>
+
+<script>
+	function login() {
+	    document.getElementById("myDIV").classList.toggle("newClassName");
+	}
+	function autorize() {
+	    document.getElementById("autorize").classList.toggle("newClassName");
+	}
+</script>
+
+</body>
+</html>
+
+<!-- 		// function send(){
+		// 	var user = {
+		// 		username: document.getElementById("name").value,
+		// 		age: document.getElementById("age").value
+		// 	};
+		// 	console.log(user.username);
+		// 	console.log(user.age);
+		// } -->
