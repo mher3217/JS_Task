@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <head>
 	<style>
-		.mystyle {
+		.hinde {
 			display:none;
 		}
-
-		.newClassName {
+		.show {
 			display:block;
 		}
 	</style>
@@ -17,13 +16,13 @@
 <button id="login_buttom" onclick="login()">Login</button>
 <button id="autorize_buttom" onclick="autorize()">Password</button>
 
-<div id="myDIV" class="mystyle">
+<div id="login" class="hinde">
     	<input id="name" type="text" placeholder="Username" >
 		<input id="password" type="text" placeholder="Password" >
-		<button id="submit">Send</button>
+		<button id="submit" onclick="send_login()">Send</button>
 </div>
 
-<div id="autorize" class="mystyle">
+<div id="autorize" class="hinde">
     	<input id="a_name" type="text" placeholder="Username" >
     	<input id="password" type="text" placeholder="Password" >
 		<input id="a_age" type="text" placeholder="Age" >
@@ -32,21 +31,25 @@
 
 <script>
 	function login() {
-	    document.getElementById("myDIV").classList.toggle("newClassName");
+		//document.getElementById("login").classList.toggle("hinde");
+		document.getElementById("login").style.display = "block";
+		document.getElementById("autorize").style.display = "none";
 	}
 	function autorize() {
-	    document.getElementById("autorize").classList.toggle("newClassName");
+		document.getElementById("autorize").style.display = "block";
+		document.getElementById("login").style.display = "none";
 	}
+	
+	function send_login(){
+		var user = {
+			username: document.getElementById("name").value,
+		 	password: document.getElementById("password").value
+		};
+		console.log(user.username);
+		console.log(user.password);
+	} 
 </script>
 
 </body>
 </html>
 
-<!-- 		// function send(){
-		// 	var user = {
-		// 		username: document.getElementById("name").value,
-		// 		age: document.getElementById("age").value
-		// 	};
-		// 	console.log(user.username);
-		// 	console.log(user.age);
-		// } -->
