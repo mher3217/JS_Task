@@ -24,34 +24,38 @@ let db = {
 //const wss = new WebSocket.Server({ port: 8080 });
 
 app.get('/', function (req, res) {
-   res.sendfile(__dirname + '/index.html');
+   res.sendFile(__dirname + '/index.html');
 })
-app.listen(3000, function () {
+app.listen(39474, function () {
    console.log('Example app listening on port 3000!')
 })
 
 var WebSocketServer = require('ws').Server,
-  wss = new WebSocketServer({port: 8080})
+  wss = new WebSocketServer({port: 27403})
 
 
 wss.on('connection', function (ws) {
   ws.on('message', function (message) {
+      let user = JSON.parse(message);
 
+      if(user.autorize){
+        db.users.create({
+          username: user.username,
+          password: user.password,
+          age: user.age
+        })
+        ws.send("new_user");
+      }else{
+          db.users.find(({username: user.username}),(function(err, result) {
+                if(result == ""){
+                  ws.send("");
+                }else{
+                  ws.send("find");
+                }
 
-      console.log('received: %s', message);
-
-
-
-
-    // if(db.users.find({username: user.username}),((err, result)=> {
-    //          if (err) throw err;
-    //          console.log(result);
-    //      })){
-    //
-    // }
-
-
-
+             console.log(result);
+           }))
+         }
   });
 });
 
@@ -96,3 +100,4 @@ wss.on('connection', function (ws) {
 //   from: by,
 //   time: time
 // }));
+
