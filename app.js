@@ -1,80 +1,103 @@
-const express = require('express');
+const WebSocket = require('ws');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const UsersSchema = require('./modul/filter.js')
-
-const app = express();
-const micagram = mongoose.createConnection('mongodb://localhost:27017/micagram');
+const app = require('express')();
 
 
+const chatDB = mongoose.createConnection('mongodb://localhost:27017/chat');
+
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: false}));
+
+require('./models/channels');
+require('./models/message');
+
+let usersSchema = require('./models/users');
+
+let db = {
+  users: chatDB.model('users', usersSchema),
+  channels: chatDB.model('channels'),
+  message: chatDB.model('message')
+};
 
 
-const users = micagram.model('users', UsersSchema);
+//const wss = new WebSocket.Server({ port: 8080 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
-
-app.use('/',(req,res,next)=>{
-  console.log(req.url + '::' + new Date().toISOString().slice(0,10));
-  next();
-});
-
-app.get('/users/filter', (req,res)=>{
-  users.find({username: new RegExp('^' + req.query.a || " " ,'gi')},
-    (err,users) =>{
-    if(err){
-      return res.send('error!!!!!');
-    }
-    res.send(users);
-  })
-});
-
-app.get('/users', (req,res)=>{
-  users.find((err,users) =>{
-      if(err){
-        return res.send('error!!!!!');
-      }
-      res.send(users);
-    })
-});
-
-app.post('/new_user', (req,res)=>{
-  users.create({
-    username: req.body.username,
-    password: req.body.password,
-    age: req.body.age
-  }, function(err,users){
-      if(err){
-        return res.send('error!!!!!');
-      }
-      return res.send('post_ok!!!');
-  })
-});
-
-app.put('/user_put/:name', (req,res)=>{
-  users.updateMany({username: req.params.name},{
-    username: req.body.username,
-    password: req.body.password,
-    age: req.body.age
-  }, function(err,users){
-      if(err){
-        return res.send('error!!!!!');
-      }
-      return res.send('post_ok!!!');
-  })
+app.get('/', function (req, res) {
+   res.sendFile(__dirname + '/index.html');
+})
+app.listen(39474, function () {
+   console.log('Example app listening on port 3000!')
 })
 
-app.delete('/user_delete/:name', (req,res)=>{
-  users.deleteOne({username: req.params.name},
-    function(err,users){
-      if(err){
-        return res.send('error!!!!!');
-      }
-      res.send('user_delete!!!');
-    });
-})
+var WebSocketServer = require('ws').Server,
+  wss = new WebSocketServer({port: 27403})
 
-app.listen(3000, ()=> {
-    console.log('Server_start on port ');
+
+wss.on('connection', function (ws) {
+  ws.on('message', function (message) {
+      let user = JSON.parse(message);
+
+      if(user.autorize){
+        db.users.create({
+          username: user.username,
+          password: user.password,
+          age: user.age
+        })
+        ws.send("new_user");
+      }else{
+          db.users.find(({username: user.username}),(function(err, result) {
+                if(result == ""){
+                  ws.send("");
+                }else{
+                  ws.send("find");
+                }
+
+             console.log(result);
+           }))
+         }
+  });
 });
+
+// wss.on('connection', function connection(ws) {
+//
+//   clients.push(ws);
+//   ws.send('\n1. authorize\n2.login\n3.write message');
+//
+//   ws.on('message', function incoming(message) {
+//     if(message == '1'){
+//
+//       ws.send('insert name:' + 'insert age:');
+//           while(met.username == null){
+//             met.username = message;
+//             console.log(met.username);
+//           }
+//           while(met.username == '1'){
+//             met.age = message;
+//             console.log(met.age);
+//           }
+//     }else if (message == '2') {
+//       db.users.find(/*{username: "ator"},*/(function(err, result) {
+//        if (err) throw err;
+//        console.log(result);
+//      }));
+//       //channels
+//     }else {
+//         (clients || []).forEach((c, i) => {
+//           if(c == ws){
+//             return;
+//           }
+//           c.send('User:' + i + '.Message-- ' + message);
+//         })
+//     }
+//   });
+//
+// });
+
+// ws.send (JSON.stringify ({
+//   type: 'message',
+//   message: message,
+//   from: by,
+//   time: time
+// }));
+
