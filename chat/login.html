@@ -12,22 +12,31 @@
 <body>
 
 
+<div id="registr">
+	<button id="login_buttom" onclick="login()">Login</button>
+	<button id="autorize_buttom" onclick="autorize()">Autorize</button>
 
-<button id="login_buttom" onclick="login()">Login</button>
-<button id="autorize_buttom" onclick="autorize()">Password</button>
+	<div id="login" class="hinde">
+	    <input id="name" type="text" placeholder="Username" >
+			<input id="password" type="text" placeholder="Password" >
+			<button id="submit" onclick="send_login()">Send</button>
+	</div>
 
-<div id="login" class="hinde">
-    	<input id="name" type="text" placeholder="Username" >
-		<input id="password" type="text" placeholder="Password" >
-		<button id="submit" onclick="send_login()">Send</button>
+	<div id="autorize" class="hinde">
+	    <input id="a_name" type="text" placeholder="Username" >
+	    <input id="a_password" type="text" placeholder="Password" >
+			<input id="a_age" type="text" placeholder="Age" >
+			<button id="a_submit" onclick="send_autorize()">Send</button>
+	</div>
+
 </div>
 
-<div id="autorize" class="hinde">
-    	<input id="a_name" type="text" placeholder="Username" >
-    	<input id="password" type="text" placeholder="Password" >
-		<input id="a_age" type="text" placeholder="Age" >
-		<button id="submit">Send</button>
+<div id="message" class="hinde">
+    <input type="text" placeholder="message" >
+		<button id="submit_message">Send</button>
 </div>
+
+<p id="errorMessage" class="hinde">please autorize</p>
 
 <script>
 	function login() {
@@ -40,20 +49,57 @@
 		document.getElementById("login").style.display = "none";
 	}
 
+	var user = {};
+  var ws = new WebSocket('ws://localhost:27403');
 
-  var ws = new WebSocket('ws://localhost:8080');
-  var user = {
-    username: document.getElementById("name").value,
-    password: document.getElementById("password").value
-  };
+	function send_login(){
+		user.username = document.getElementById("name").value;
+		user.password = document.getElementById("password").value;
+		user.autorize = undefined;
+		ws.send(JSON.stringify(user));
+		      console.log(user);
+	}
+
+	function send_autorize(){
+		user.username = document.getElementById("a_name").value;
+		user.password = document.getElementById("a_password").value;
+		user.age = document.getElementById("a_age").value;
+
+		user.autorize = "autorize";
+		ws.send(JSON.stringify(user));
+					console.log(user);
+	}
+
 
 // event emmited when connected
   ws.onopen = function () {
       console.log('websocket is connected ...')
       // sending a send event to websocket server
-      ws.send(JSON.stringify(user));
-      console.log(user);
+      //ws.send(JSON.stringify(user));
+
   }
+
+
+  // event emmited when receiving message
+  ws.onmessage = function (ev) {
+
+		if(ev.data == "find"){
+			document.getElementById("registr").style.display = "none";
+			document.getElementById("message").style.display = "block";
+			console.log("find!!!!");
+		}else if(ev.data == "new_user"){
+			console.log("creat_new_user!!!!!");
+		}else{
+			document.getElementById("errorMessage").style.display = "block";
+			console.log("can't find!!!");
+		}
+
+  }
+</script>
+
+</body>
+</html>
+
 
 
   // event emmited when receiving message
