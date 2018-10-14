@@ -17,7 +17,9 @@ const usersSchema = new mongoose.Schema({
     index:true,
     require:true
   },
-  have_book:[]
+  have_book:{
+    type: String
+  }
 });
 
 module.exports = usersSchema;

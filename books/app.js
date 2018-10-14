@@ -83,42 +83,25 @@ app.get('/users/:id/books', function (req, res) {
 })
 
 
-function check(req, res, next){
-  db.books.findOne({_id: req.params.id},
-    (err, book)=>{
-      if(err || book.occupied){
-          return res.send('book is yous by user id: ' + book.occupied_by);
-      }
-      next();
-  })
-}
-function update_occupied(req, res, next){
-    db.books.updateOne( {_id: req.params.id}, {occupied: true, occupied_by:  req.params.user_id},
-      (err, user_book)=>{
-        if(err || !user_book){
-          return res.send('book not found_error!!!!!');
-        }
-        next();
-      }
-    )
-}
-function update_user_books(req, res, next){
-  db.books.findOne( {_id: req.params.id},
-    function(err, user_book){
-        if(err || !user_book){
-          return res.send('book not found_error!!!!!');
-        }
-      db.users.updateOne( {_id: req.params.user_id}, {have_book: user_book.title},function(err,i){
-        //booksSchema.have_book.push("aaaa");
-        if(err || !i){
-          return res.send('book not found_error!!!!!');
-        }
-      });
-      return res.send('book found_ok!!!');
-    })
-}
+const user_books = require('./requets_libery/add_delete_books.js');
 
-app.post('/:user_id/:id/books',check, update_occupied, update_user_books);
+app.post('/:user_id/:id/books',user_books.check, user_books.update_occupied, user_books.update_user_books);
+
+
+app.put('/:user_id/:id/books', (req, res)=>{
+  db.users.updateOne({_id: req.params.user_id}, {$unset : {have_book : req.params.id}},
+    (err, user) =>{
+      if(err || !user){
+        return res.send('user_books_error');
+      }
+      return res.send('update user books');
+  });
+  db.books.updateOne({_id: req.params.id}, {occupied: false, occupied_by: null},(err, book_up)=>{
+    if(err || !book_up){
+      return res.send('book not update!!');
+    }
+  });
+})
 
 
 ///////////////////////////////

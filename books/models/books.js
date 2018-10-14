@@ -18,7 +18,7 @@ const booksSchema = new mongoose.Schema({
   occupied: Boolean,
   pages: Number,
   occupied_by: {
-    type: String,//{type: Schema.Types.ObjectId, ref: 'users'},
+    obj: String,//{type: Schema.Types.ObjectId, ref: 'users'},
   }
 });
 
