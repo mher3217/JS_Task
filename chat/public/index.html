@@ -7,11 +7,35 @@
 		.show {
 			display:block;
 		}
+		.button #new_channel{
+	    background-color: #4CAF50;
+	    border: none;
+	    color: white;
+	    padding: 15px 32px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 16px;
+	    margin: 4px 2px;
+	    cursor: pointer;
+		}
+		#new_channel a{
+			background-color: #4CAF50;
+			border: none;
+			color: white;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+		}
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-
+<!--///////////////////////////////////////// registr-->
 	<div id="registr">
 		<button id="login_buttom" onclick="login()">Login</button>
 		<button id="autorize_buttom" onclick="autorize()">Autorize</button>
@@ -19,7 +43,8 @@
 		<div id="login" class="hinde">
 		    <input id="name" type="text" placeholder="Username" >
 				<input id="password" type="text" placeholder="Password" >
-				<button id="submit" onclick="send_login()">Send</button>
+				<button class="button"  id="submit" onclick="send_login()">submit</button>
+
 		</div>
 
 		<div id="autorize" class="hinde">
@@ -31,15 +56,24 @@
 
 	</div>
 
+
+<!--//////////////////////////////// channels-->
+	<div id="channels" class="hinde">
+
+			<input id="u_channel" type="text" placeholder="insert channel name" >
+			<button id="select_channels" onclick="send_channels()">new channel</button>
+			<div id="new_channel" onclick="seleckt_channels()"></div>
+	</div>
+
+
+<!--/////////////////////////  message-->
 	<div id="message" class="hinde">
 	    <input id="t_message" type="text" placeholder="message" >
 			<button id="submit_message" onclick="message()">Send</button>
 	</div>
 
 	<p id="errorMessage" class="hinde">please autorize</p>
-	<div id="demo">
-
-	</div>
+	<div id="demo" ></div>
 
 	<script >
 		function login() {
@@ -74,6 +108,21 @@
 			console.log(user_auto);
 		}
 
+		function send_channels(){
+			let r = document.getElementById("u_channel").value
+			ws.send(JSON.stringify(r));
+		/*	user_auto.username = document.getElementById("a_name").value;
+			user_auto.password = document.getElementById("a_password").value;
+			user_auto.age = document.getElementById("a_age").value;
+			user_auto.autorize = "autorize";
+			ws.send(JSON.stringify(user_auto));
+			console.log(user_auto);*/
+		}
+		 function seleckt_channels(){
+			 document.getElementById("channels").style.display = "none";
+			 document.getElementById("message").style.display = "block";
+		 }
+
 		function message() {
 			user_msg.message = document.getElementById("t_message").value;
 			user_msg.username = document.getElementById("name").value;
@@ -96,29 +145,36 @@
 		}
 
 		ws.onclose = () => {
-			console.log("closed");
+			console.log("Server error_closed");
 		};
 		// event emmited when receiving message
 		ws.onmessage = function (ev) {
 
 			if(ev.data == document.getElementById("name").value){
 				document.getElementById("registr").style.display = "none";
-				document.getElementById("message").style.display = "block";
+				document.getElementById("channels").style.display = "block";
 
-				console.log(ev);
 			}else if(ev.data == "new_user"){
 				document.getElementById("registr").style.display = "none";
-				document.getElementById("message").style.display = "block";
+				document.getElementById("channels").style.display = "block";
 				console.log("creat_new_user!!!!!");
 				// document.write("creat_new_user!!!!!");
 			}else if(ev.data == "error"){
 				document.getElementById("errorMessage").style.display = "block";
 				console.log("can't find!!!");
+			}else if(ev.data == "new_channel"){
+				console.log('ok_channels');
+				(function tick(a) {
+					let node = document.createElement("a");
+					let textnode = document.createTextNode(a);
+					node.appendChild(textnode);
+					 document.getElementById("new_channel").appendChild(node);
+				})(document.getElementById("u_channel").value)
 			}
 			else{
-				(function tick(a) {
+				(function tick(text) {
 					let node = document.createElement("h5");
-					let textnode = document.createTextNode(a);
+					let textnode = document.createTextNode(text);
 					node.appendChild(textnode);
 					 document.getElementById("demo").appendChild(node);
 				})(ev.data);
