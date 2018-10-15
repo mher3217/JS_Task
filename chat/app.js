@@ -71,26 +71,29 @@ wss.on('connection', function (ws) {
              }))
         }
        }
-       else if (typeof(user) == 'object') {
-         var i = user.username;
-          (clients || []).forEach((c, i) => {
-            if(c == ws){
-              return;
-            }
-            c.send(user.username + ": " + user.message );
-          })
-       }
-       else{
-         // for (var key in clients) {
-         //    clients[key].send(message);
-         //  }
+       else if(user == 'channel_create'){
+         ws.send('new_channel');
+       }else{
+
          let new_channel = user;
-          console.log(new_channel);
+
           clients[new_channel] = [];
          //clients.new_channel.push(ws);
-          ws.send('new_channel');
 
+         if(typeof(user) == 'object'){
+           var i = user.username;
+           // for (var key in clients) {
+           //    clients[key].send(message);
+           //  }
+            (clients.new_channel || []).forEach((c, i) => {
+              if(c == ws){
+                return;
+              }
+              c.send(user.username + ": " + user.message );
+            })
          }
+        }
+
          console.log(clients);
        // else{
        //   // db.message.create({
@@ -108,4 +111,3 @@ wss.on('connection', function (ws) {
 
   });
 });
-
