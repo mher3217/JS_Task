@@ -62,7 +62,7 @@
 
 			<input id="u_channel" type="text" placeholder="insert channel name" >
 			<button id="select_channels" onclick="send_channels()">new channel</button>
-			<div id="new_channel" onclick="seleckt_channels()"></div>
+			<div id="new_channel" ></div>
 	</div>
 
 
@@ -107,18 +107,24 @@
 			ws.send(JSON.stringify(user_auto));
 			console.log(user_auto);
 		}
-
+		var numm = 0;
 		function send_channels(){
+			++numm;
 			let r = document.getElementById("u_channel").value
-			ws.send(JSON.stringify(r));
-		/*	user_auto.username = document.getElementById("a_name").value;
-			user_auto.password = document.getElementById("a_password").value;
-			user_auto.age = document.getElementById("a_age").value;
-			user_auto.autorize = "autorize";
-			ws.send(JSON.stringify(user_auto));
-			console.log(user_auto);*/
+			ws.send(JSON.stringify('channel_create'));
+
 		}
+		document.querySelector('#new_channel').addEventListener('click', function(e){
+		  var id = e.target.id;
+			console.log(id);
+				ws.send(JSON.stringify(id));
+		
+
+						 document.getElementById("channels").style.display = "none";
+						 document.getElementById("message").style.display = "block";
+		});
 		 function seleckt_channels(){
+
 			 document.getElementById("channels").style.display = "none";
 			 document.getElementById("message").style.display = "block";
 		 }
@@ -148,6 +154,7 @@
 			console.log("Server error_closed");
 		};
 		// event emmited when receiving message
+
 		ws.onmessage = function (ev) {
 
 			if(ev.data == document.getElementById("name").value){
@@ -164,8 +171,11 @@
 				console.log("can't find!!!");
 			}else if(ev.data == "new_channel"){
 				console.log('ok_channels');
+
 				(function tick(a) {
+
 					let node = document.createElement("a");
+					node.id = 'channelID' + numm;
 					let textnode = document.createTextNode(a);
 					node.appendChild(textnode);
 					 document.getElementById("new_channel").appendChild(node);
