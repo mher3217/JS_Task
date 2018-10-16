@@ -32,16 +32,16 @@ app.get('/', function (req, res) {
 })
 
 app.listen(39474, function () {
-   console.log('Example app listening on port 3000!')
+   console.log('Example app listening on port 39474!')
 })
 
 //var WebSocketServer = require('ws').Server,
 const wss = new WebSocket.Server({port: 27403})
-let clients = [];
+let clients = {};
 //var msg = {};
 
 wss.on('connection', function (ws) {
-  clients.push(ws);
+
 
   ws.on('message', function (message) {
 
@@ -67,21 +67,46 @@ wss.on('connection', function (ws) {
                   }
 
                     return ws.send(user.username);
+                    //ws.close();
              }))
         }
        }
-       else{
-         db.message.create({
-           text: user.message
-         })
-         var i = user.username;
-          (clients || []).forEach((c, i) => {
-            if(c == ws){
-              return;
-            }
-            c.send(user.username + ": " + user.message );
-          })
-       }
+       else if(user == 'channel_create'){
+         ws.send('new_channel');
+       }else{
+
+         let new_channel = user;
+
+          clients[new_channel] = [];
+         //clients.new_channel.push(ws);
+
+         if(typeof(user) == 'object'){
+           var i = user.username;
+           // for (var key in clients) {
+           //    clients[key].send(message);
+           //  }
+            (clients.new_channel || []).forEach((c, i) => {
+              if(c == ws){
+                return;
+              }
+              c.send(user.username + ": " + user.message );
+            })
+         }
+        }
+
+         console.log(clients);
+       // else{
+       //   // db.message.create({
+       //   //   text: user.message
+       //   // })
+         // var i = user.username;
+         //  (clients || []).forEach((c, i) => {
+         //    if(c == ws){
+         //      return;
+         //    }
+         //    c.send(user.username + ": " + user.message );
+         //  })
+       // }
 
 
   });

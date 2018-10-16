@@ -18,7 +18,7 @@ const usersSchema = new mongoose.Schema({
     require:true
   },
   have_book:{
-    type: String
+    type: []
   }
 });
 
