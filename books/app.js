@@ -5,20 +5,36 @@ const bodyParser = require('body-parser');
 const UsersRouter = require('./services/users/api.js');
 
 const libery = mongoose.createConnection('mongodb://localhost:27017/libery');
+let usersSchema = require('./models/users.js');
+let booksSchema =  require('./models/books.js');
+let db = {
+  users: libery.model('users', usersSchema),
+  books: libery.model('books', booksSchema),
+}
+
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-let usersSchema = require('./models/users');
-let booksSchema =  require('./models/books');
-let db = {
-  users: libery.model('users', usersSchema),
-  books: libery.model('books', booksSchema),
-}
+
 
 app.use('/router', UsersRouter);
+
+
+app.post('/new_book', (req, res)=>{
+  db.books.create({
+    title: req.body.title,
+    pages: req.body.pages,
+    occupied: false
+  }, function(err, books){
+      if(err || !books){
+        return res.send('books_error!!!!!');
+      }
+      return res.send('books_post_ok!!!');
+  })
+});
 //////////////////////////////////
 /////////////////////////////////
 ////////////////////////////////
