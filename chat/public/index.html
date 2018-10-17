@@ -61,7 +61,7 @@
 	<div id="channels" class="hinde">
 
 			<input id="u_channel" type="text" placeholder="insert channel name" >
-			<button id="select_channels" onclick="send_channels()">new channel</button>
+			<button id="select_channels" >new channel</button>
 			<div id="new_channel" ></div>
 	</div>
 
@@ -107,27 +107,32 @@
 			ws.send(JSON.stringify(user_auto));
 			console.log(user_auto);
 		}
+
 		var numm = 0;
-		function send_channels(){
-			++numm;
-			let r = document.getElementById("u_channel").value
-			ws.send(JSON.stringify('channel_create'));
 
-		}
-		document.querySelector('#new_channel').addEventListener('click', function(e){
-		  var id = e.target.id;
-			console.log(id);
-				ws.send(JSON.stringify(id));
-		
+		document.querySelector('#select_channels').addEventListener('click', function(e){
+			console.log('ok_channels');
+			 e.target.id;
+			ws.send(JSON.stringify(user_msg));
+			(function tick(a) {
 
-						 document.getElementById("channels").style.display = "none";
-						 document.getElementById("message").style.display = "block";
+				let node = document.createElement("a");
+				node.id = 'channelID' + numm;
+				let textnode = document.createTextNode(a);
+				node.appendChild(textnode);
+				 document.getElementById("new_channel").appendChild(node);
+			})(document.getElementById("u_channel").value)
+
 		});
-		 function seleckt_channels(){
 
-			 document.getElementById("channels").style.display = "none";
-			 document.getElementById("message").style.display = "block";
-		 }
+		document.querySelector('#new_channel').addEventListener('click', function(e){
+
+				user_msg.channel_id = e.target.id;
+				ws.send(JSON.stringify(user_msg));
+
+				document.getElementById("channels").style.display = "none";
+				document.getElementById("message").style.display = "block";
+		});
 
 		function message() {
 			user_msg.message = document.getElementById("t_message").value;
@@ -169,19 +174,10 @@
 			}else if(ev.data == "error"){
 				document.getElementById("errorMessage").style.display = "block";
 				console.log("can't find!!!");
-			}else if(ev.data == "new_channel"){
-				console.log('ok_channels');
-
-				(function tick(a) {
-
-					let node = document.createElement("a");
-					node.id = 'channelID' + numm;
-					let textnode = document.createTextNode(a);
-					node.appendChild(textnode);
-					 document.getElementById("new_channel").appendChild(node);
-				})(document.getElementById("u_channel").value)
-			}
-			else{
+			}	else if(ev.data == "error"){
+						document.getElementById("errorMessage").style.display = "block";
+						console.log("can't find!!!");
+					}else{
 				(function tick(text) {
 					let node = document.createElement("h5");
 					let textnode = document.createTextNode(text);
