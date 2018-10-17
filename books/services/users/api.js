@@ -1,14 +1,21 @@
 const express = require('express');
 const UsersRouter = express.Router();
+const UsersService = require('./service.js');
 
 UsersRouter.get('/books', (req, res)=> {
-    db.books.find({title: new RegExp('^' + (req.query.q || ''),'gi')},
-      (err, books) =>{
-        if(err || !books){
-          return res.send('books_error');
-        }
-        return res.send(books);
-    });
+  let p = UsersService.getUsers();
+  p.then(books =>{
+    return res.send(books);
+  }).catch(err =>{
+    return res.send('error')
+  })
+    // db.books.find({title: new RegExp('^' + (req.query.q || ''),'gi')},
+    //   (err, books) =>{
+    //     if(err || !books){
+    //       return res.send('books_error');
+    //     }
+    //     return res.send(books);
+    // });
 })
 UsersRouter.get('/books/:id', (req,res)=>{
   db.books.findOne({_id: req.params.id}, (err, books) =>{
