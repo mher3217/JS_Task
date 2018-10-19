@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<head>
+	<style>
+		.hinde {
+			display:none;
+		}
+		.show {
+			display:block;
+		}
+		.button #new_channel{
+	    background-color: #4CAF50;
+	    border: none;
+	    color: white;
+	    padding: 15px 32px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 16px;
+	    margin: 4px 2px;
+	    cursor: pointer;
+		}
+		#new_channel a{
+			background-color: #4CAF50;
+			border: none;
+			color: white;
+			padding: 15px 32px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 16px;
+			margin: 4px 2px;
+			cursor: pointer;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<!--///////////////////////////////////////// registr-->
+	<div id="registr">
+		<button id="login_buttom" onclick="login()">Login</button>
+		<button id="autorize_buttom" onclick="autorize()">Autorize</button>
+
+		<div id="login" class="hinde">
+		    <input id="name" type="text" placeholder="Username" >
+				<input id="password" type="text" placeholder="Password" >
+				<button class="button"  id="submit" onclick="send_login()">submit</button>
+
+		</div>
+
+		<div id="autorize" class="hinde">
+		    <input id="a_name" type="text" placeholder="Username" >
+		    <input id="a_password" type="text" placeholder="Password" >
+				<input id="a_age" type="text" placeholder="Age" >
+				<button id="a_submit" onclick="send_autorize()">Send</button>
+		</div>
+
+	</div>
+
+
+<!--//////////////////////////////// channels-->
+	<div id="channels" class="hinde">
+
+			<input id="u_channel" type="text" placeholder="insert channel name" >
+			<button id="select_channels" >new channel</button>
+			<div id="new_channel" ></div>
+	</div>
+
+
+<!--/////////////////////////  message-->
+	<div id="message" class="hinde">
+	    <input id="t_message" type="text" placeholder="message" >
+			<button id="submit_message" onclick="message()">Send</button>
+	</div>
+
+	<p id="errorMessage" class="hinde">please autorize</p>
+	<div id="demo" ></div>
+
+	<script >
+		function login() {
+			//document.getElementById("login").classList.toggle("hinde");
+			document.getElementById("login").style.display = "block";
+			document.getElementById("autorize").style.display = "none";
+		}
+		function autorize() {
+			document.getElementById("autorize").style.display = "block";
+			document.getElementById("login").style.display = "none";
+		}
+
+		var user_log = {};
+		var user_auto = {};
+		var user_msg = {};
+		var ws = new WebSocket('ws://localhost:27403');
+
+		function send_login(){
+			user_log.username = document.getElementById("name").value;
+			user_log.password = document.getElementById("password").value;
+			user_log.login = "login";
+			ws.send(JSON.stringify(user_log));
+						console.log(user_log);
+		}
+
+		function send_autorize(){
+			user_auto.username = document.getElementById("a_name").value;
+			user_auto.password = document.getElementById("a_password").value;
+			user_auto.age = document.getElementById("a_age").value;
+			user_auto.autorize = "autorize";
+			ws.send(JSON.stringify(user_auto));
+			console.log(user_auto);
+		}
+
+		var numm = 0;
+
+		document.querySelector('#select_channels').addEventListener('click', function(e){
+			console.log('ok_channels');
+			 e.target.id;
+			ws.send(JSON.stringify(user_msg));
+			(function tick(a) {
+
+				let node = document.createElement("a");
+				node.id = 'channelID' + numm;
+				let textnode = document.createTextNode(a);
+				node.appendChild(textnode);
+				 document.getElementById("new_channel").appendChild(node);
+			})(document.getElementById("u_channel").value)
+
+		});
+
+		document.querySelector('#new_channel').addEventListener('click', function(e){
+
+				user_msg.channel_id = e.target.id;
+				ws.send(JSON.stringify(user_msg));
+
+				document.getElementById("channels").style.display = "none";
+				document.getElementById("message").style.display = "block";
+		});
+
+		function message() {
+			user_msg.message = document.getElementById("t_message").value;
+			user_msg.username = document.getElementById("name").value;
+
+			(function tick(a) {
+				let node = document.createElement("H5");
+				let textnode = document.createTextNode(a);
+				node.appendChild(textnode);
+				 document.getElementById("demo").appendChild(node);
+			})(document.getElementById("t_message").value);
+		//	console.log(user);
+			ws.send(JSON.stringify(user_msg));
+		}
+
+		// event emmited when connected
+		ws.onopen = function () {
+				console.log('websocket is connected ...')
+				// sending a send event to websocket server
+				//ws.send(JSON.stringify(user));
+		}
+
+		ws.onclose = () => {
+			console.log("Server error_closed");
+		};
+		// event emmited when receiving message
+
+		ws.onmessage = function (ev) {
+
+			if(ev.data == document.getElementById("name").value){
+				document.getElementById("registr").style.display = "none";
+				document.getElementById("channels").style.display = "block";
+
+			}else if(ev.data == "new_user"){
+				document.getElementById("registr").style.display = "none";
+				document.getElementById("channels").style.display = "block";
+				console.log("creat_new_user!!!!!");
+				// document.write("creat_new_user!!!!!");
+			}else if(ev.data == "error"){
+				document.getElementById("errorMessage").style.display = "block";
+				console.log("can't find!!!");
+			}	else if(ev.data == "error"){
+						document.getElementById("errorMessage").style.display = "block";
+						console.log("can't find!!!");
+					}else{
+				(function tick(text) {
+					let node = document.createElement("h5");
+					let textnode = document.createTextNode(text);
+					node.appendChild(textnode);
+					 document.getElementById("demo").appendChild(node);
+				})(ev.data);
+
+					//document.getElementById("demo").innerHTML = ev.data;
+			}
+		}
+
+	</script>
+
+	<!-- <script src="public/req_res.js">
+	</script> -->
+
+</body>
+</html>
