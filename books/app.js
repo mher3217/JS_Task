@@ -23,6 +23,26 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use('/router', UsersRouter);
 
 
+<<<<<<< HEAD
+=======
+app.post('/new_book', (req, res)=>{
+  db.books.create({
+    title: req.body.title,
+    pages: req.body.pages,
+    occupied: false
+  }, function(err, books){
+      if(err || !books){
+        return res.send('books_error!!!!!');
+      }
+      return res.send('books_post_ok!!!');
+  })
+});
+//////////////////////////////////
+/////////////////////////////////
+////////////////////////////////
+///////////////  USERS!!!!!!!!!!
+
+>>>>>>> 5658a1c8768a17ae5302928695f2bf1eb7c9ecea
 app.get('/users/:id/books', function (req, res) {
     db.users.findOne({_id: req.params.id} ,
       (err, user) =>{
@@ -64,6 +84,63 @@ app.put('/:user_id/:id/books', (req, res)=>{
 })
 
 
+<<<<<<< HEAD
 app.listen(4000, function () {
    console.log('app listening on port 4000!')
+=======
+///////////////////////////////
+////////////////////// Standart request!!!!!!!!!!!!!
+
+app.get('/users', function (req, res) {
+    db.users.find({username: new RegExp('^' + (req.query.q || ''),'gi')},
+      (err, user) =>{
+        if(err || !user){
+          return res.send('user_error');
+        }
+        return res.send(user);
+    });
+})
+app.get('/users/:id', (req,res)=>{
+  db.users.findOne({_id: req.params.id}, (err, users) =>{
+      if(err || ! users){
+        return res.send('user not found');
+      }
+      return res.send(users);
+    })
+});
+
+app.post('/new_user', (req, res)=>{
+  db.users.create({
+    username: req.body.username
+  }, function(err, users){
+      if(err || !users){
+        return res.send('user_error!!!!!');
+      }
+      return res.send('user_post_ok!!!');
+  })
+});
+
+app.put('/user_put/:name', (req,res)=>{
+  db.users.updateOne({username: req.params.name},{
+    username: req.body.username
+  }, function(err, user){
+      if(err || !user){
+        return res.send('user_put error!!!!!');
+      }
+      return res.send('user_put_ok!!!');
+  })
+})
+app.delete('/user_delete/:key', (req,res)=>{
+  db.users.deleteOne({key: req.params.key},
+    function(err, user){
+      if(err | !user){
+        return res.send('user_delete error!!!!!');
+      }
+      return res.send('user_delete!!!');
+    });
+})
+
+app.listen(3000, function () {
+   console.log('app listening on port 3000!')
+>>>>>>> 5658a1c8768a17ae5302928695f2bf1eb7c9ecea
 })
