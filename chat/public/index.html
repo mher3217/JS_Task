@@ -19,7 +19,7 @@
 	    margin: 4px 2px;
 	    cursor: pointer;
 		}
-		#new_channel a{
+		#select_channels a{
 			background-color: #4CAF50;
 			border: none;
 			color: white;
@@ -61,8 +61,8 @@
 	<div id="channels" class="hinde">
 
 			<input id="u_channel" type="text" placeholder="insert channel name" >
-			<button id="select_channels" >new channel</button>
-			<div id="new_channel" ></div>
+			<button id="new_channel" >new channel</button>
+			<div  id="select_channels"></div>
 	</div>
 
 
@@ -89,6 +89,7 @@
 		var user_log = {};
 		var user_auto = {};
 		var user_msg = {};
+		var channel = {};
 		var ws = new WebSocket('ws://localhost:27403');
 
 		function send_login(){
@@ -112,26 +113,28 @@
 
 		document.querySelector('#select_channels').addEventListener('click', function(e){
 			console.log('ok_channels');
-			 e.target.id;
+			user_msg.channel_id = e.target.id;
 			ws.send(JSON.stringify(user_msg));
-			(function tick(a) {
 
-				let node = document.createElement("a");
-				node.id = 'channelID' + numm;
-				let textnode = document.createTextNode(a);
-				node.appendChild(textnode);
-				 document.getElementById("new_channel").appendChild(node);
-			})(document.getElementById("u_channel").value)
+			document.getElementById("channels").style.display = "none";
+			document.getElementById("message").style.display = "block";
 
 		});
 
 		document.querySelector('#new_channel').addEventListener('click', function(e){
+				numm++;
+				(function tick(a) {
 
-				user_msg.channel_id = e.target.id;
+					let node = document.createElement("a");
+					node.id = 'channelID' + numm;
+					let textnode = document.createTextNode(a);
+					node.appendChild(textnode);
+					 document.getElementById("select_channels").appendChild(node);
+				})(document.getElementById("u_channel").value)
+
+				user_msg.channel_name = document.getElementById("u_channel").value;
 				ws.send(JSON.stringify(user_msg));
-
-				document.getElementById("channels").style.display = "none";
-				document.getElementById("message").style.display = "block";
+				user_msg.channel_name = undefined;
 		});
 
 		function message() {
@@ -161,8 +164,20 @@
 		// event emmited when receiving message
 
 		ws.onmessage = function (ev) {
+			let channels_arr = JSON.parse(ev.data);
 
-			if(ev.data == document.getElementById("name").value){
+			if(channels_arr[0] == document.getElementById("name").value){
+				for(let i = 1; i < channels_arr.length; i++){
+					(function tick(a) {
+						numm = i;
+						let node = document.createElement("a");
+						node.innerHTML = channels_arr[i];
+						node.id = 'channelID' + numm ;
+						let textnode = document.createTextNode(a);
+						node.appendChild(textnode);
+						 document.getElementById("select_channels").appendChild(node);
+					})(document.getElementById("u_channel").value)
+				}
 				document.getElementById("registr").style.display = "none";
 				document.getElementById("channels").style.display = "block";
 
@@ -174,10 +189,10 @@
 			}else if(ev.data == "error"){
 				document.getElementById("errorMessage").style.display = "block";
 				console.log("can't find!!!");
-			}	else if(ev.data == "error"){
+			}else if(ev.data == "error"){
 						document.getElementById("errorMessage").style.display = "block";
 						console.log("can't find!!!");
-					}else{
+			}else{
 				(function tick(text) {
 					let node = document.createElement("h5");
 					let textnode = document.createTextNode(text);

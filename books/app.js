@@ -5,12 +5,12 @@ const bodyParser = require('body-parser');
 const UsersRouter = require('./services/users/api.js');
 
 const libery = mongoose.createConnection('mongodb://localhost:27017/libery');
-let usersSchema = require('./models/users.js');
-let booksSchema =  require('./models/books.js');
-let db = {
-  users: libery.model('users', usersSchema),
-  books: libery.model('books', booksSchema),
-}
+// let usersSchema = require('./models/users.js');
+// let booksSchema =  require('./models/books.js');
+// let db = {
+//   users: libery.model('users', usersSchema),
+//   books: libery.model('books', booksSchema),
+// }
 
 
 const app = express();
@@ -34,7 +34,7 @@ app.get('/users/:id/books', function (req, res) {
 })
 
 
-const user_books = require('./requets_libery/add_delete_books.js');
+const user_books = require('./middleware/add_delete_books.js');
 
 app.post('/:user_id/:id/books',user_books.check, user_books.update_occupied, user_books.update_user_books);
 
@@ -64,6 +64,6 @@ app.put('/:user_id/:id/books', (req, res)=>{
 })
 
 
-app.listen(4000, function () {
-   console.log('app listening on port 4000!')
+app.listen(4300, function () {
+   console.log('app listening on port 4300!')
 })

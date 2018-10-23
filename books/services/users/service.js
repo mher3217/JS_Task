@@ -13,9 +13,9 @@ class UsersService {
   getBy_ID(optional){
     let obj_id = optional || {};
     var search_in;
-    if(obj_id.name == 'books'){
+    if(obj_id.collection == 'books'){
       search_in = this.db.books;
-    }else if(obj_id.name == 'users'){
+    }else if(obj_id.collection == 'users'){
       search_in = this.db.users;
     }
     return new Promise((resolve, reject)=>{
@@ -29,12 +29,21 @@ class UsersService {
 
   getBy_name(optional){
     let op = optional || {};
-    var search_in;
-    var search_by;
-
+    if(typeof(op.offset) != 'number'){
+      op.offset = 0;
+    };
+    if(typeof(op.limit) != 'number'){
+      op.limit = 10;
+    };
+    console.log(op);
+    let name = new RegExp('^' + (op.name || ''),'gi');
     if(op.collection == 'books'){
       return new Promise((resolve, reject)=>{
-        this.db.books.find({ title : op.name }).then(books =>{
+        this.db.books.find({ title : name })
+        .skip(op.offset)
+        .limit(op.limit)
+        .exec()
+        .then(books =>{
           resolve(books);
         }).catch(err =>{
 
@@ -43,7 +52,7 @@ class UsersService {
       });
     }else if(op.collection == 'users'){
       return new Promise((resolve, reject)=>{
-        this.db.users.find({ username : op.name }).then(books =>{
+        this.db.users.find({ username : name }).then(books =>{
           resolve(books);
         }).catch(err =>{
 

@@ -2,14 +2,25 @@ const express = require('express');
 const UsersRouter = express.Router();
 const UsersService = require('./service.js');
 
-var optional = {};
 
 ///////////////////////////////
 //////////////////////Get Books request!!!!!!!!!!!!!
 UsersRouter.get('/books', (req, res)=> {
-  optional.name = new RegExp('^' + (req.query.q || ''),'gi');
-  optional.collection = 'books';
-  let p = UsersService.getBy_name(optional);
+  let offset = isFinite(parseInt(req.query.offset))? parseInt(req.query.offset) : 0;
+  if(offset < 0){
+    offset = 0;
+  }
+  let limit = isFinite(parseInt(req.query.limit)) ? parseInt(req.query.limit) : 10;
+  if(limit < 0 || limit > 100){
+    limit = 100;
+  }
+  let p = UsersService.getBy_name({
+    collection: 'books',
+    name : req.query.name,
+    offset: offset,
+    limit: limit
+  });
+
   p.then(books =>{
     return res.send(books);
   }).catch(err =>{
@@ -18,9 +29,10 @@ UsersRouter.get('/books', (req, res)=> {
   })
 })
 UsersRouter.get('/books/:id', (req,res)=>{
-  optional.name = 'books';
-  optional.id = req.params.id;
-  let p = UsersService.getBy_ID(optional);
+  let p = UsersService.getBy_ID({
+    collection : 'books',
+    id : req.params.id
+  });
   p.then(data =>{
     return res.send(data);
   }).catch(err =>{
@@ -31,9 +43,20 @@ UsersRouter.get('/books/:id', (req,res)=>{
 ///////////////////////////////
 //////////////////////Get Users request!!!!!!!!!!!!!
 UsersRouter.get('/users', function (req, res) {
-  optional.name = new RegExp('^' + (req.query.q || ''),'gi');
-  optional.collection = 'users';
-  let p = UsersService.getBy_name(optional);
+  let offset = isFinite(parseInt(req.query.offset))? parseInt(req.query.offset) : 0;
+  if(offset < 0){
+    offset = 0;
+  }
+  let limit = isFinite(parseInt(req.query.limit)) ? parseInt(req.query.limit) : 10;
+  if(limit < 0 || limit > 100){
+    limit = 100;
+  }
+  let p = UsersService.getBy_name({
+    collection: 'users',
+    name : req.query.name,
+    offset: offset,
+    limit: limit
+  });
   p.then(users =>{
     return res.send(users);
   }).catch(err =>{
@@ -42,9 +65,10 @@ UsersRouter.get('/users', function (req, res) {
   })
 })
 UsersRouter.get('/users/:id', (req,res)=>{
-  optional.id = req.params.id;
-  optional.name = 'users';
-  let p = UsersService.getBy_ID(optional);
+  let p = UsersService.getBy_ID({
+    id : req.params.id,
+    collection : 'users'
+  });
   p.then(users =>{
     return res.send(users);
   }).catch(err =>{
@@ -58,10 +82,11 @@ UsersRouter.get('/users/:id', (req,res)=>{
 
 var create = {};
 UsersRouter.post('/new_book', (req, res)=>{
-  create.title = req.body.title;
-  create.pages = req.body.pages;
-  create.username = undefined;
-  let p = UsersService.createBooks_Users(create);
+  let p = UsersService.createBooks_Users({
+    title : req.body.title,
+    pages : req.body.pages,
+    username : undefined
+  });
   p.then(books =>{
     return res.send(books);
   }).catch(err =>{
@@ -82,13 +107,13 @@ UsersRouter.post('/new_user', (req, res)=>{
 
 ///////////////////////////////
 ////////////////////// Put request!!!!!!!!!!!!!
-let put = {};
 UsersRouter.put('/book_put/:name', (req,res)=>{
-  put.name = req.params.name;
-  put.title = req.body.title;
-  put.pages = req.body.pages;
-  put.username = undefined;
-  let p = UsersService.put_books_users(put);
+  let p = UsersService.put_books_users({
+    name : req.params.name,
+    title : req.body.title,
+    pages : req.body.pages,
+    username : undefined
+  });
   p.then(users =>{
     return res.send(users);
   }).catch(err =>{
@@ -98,9 +123,10 @@ UsersRouter.put('/book_put/:name', (req,res)=>{
 })
 
 UsersRouter.put('/user_put/:name', (req,res)=>{
-  put.name = req.params.name;
-  put.username = req.body.username;
-  let p = UsersService.put_books_users(put);
+  let p = UsersService.put_books_users({
+    name : req.params.name,
+    username : req.body.username
+  });
   p.then(users =>{
     return res.send(users);
   }).catch(err =>{
@@ -111,11 +137,12 @@ UsersRouter.put('/user_put/:name', (req,res)=>{
 
 ///////////////////////////////
 ////////////////////// Delete request!!!!!!!!!!!!!
-let delete_ = {};
+
 UsersRouter.delete('/book_delete/:key', (req,res)=>{
-  delete_.key = req.params.key;
-  delete_.collection = 'books';
-  let p = UsersService.deleteBy_key(delete_);
+  let p = UsersService.deleteBy_key({
+    key : req.params.key,
+    collection : 'books'
+  });
   p.then(data =>{
     return res.send(data);
   }).catch(err =>{
@@ -125,9 +152,10 @@ UsersRouter.delete('/book_delete/:key', (req,res)=>{
 })
 
 UsersRouter.delete('/user_delete/:key', (req,res)=>{
-  delete_.key = req.params.key;
-  delete_.collection = 'users';
-  let p = UsersService.deleteBy_key(delete_);
+  let p = UsersService.deleteBy_key({
+    key : req.params.key,
+    collection : 'users'
+  });
   p.then(data =>{
     return res.send(data);
   }).catch(err =>{

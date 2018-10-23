@@ -31,14 +31,14 @@ app.get('/', function (req, res) {
    res.sendFile(__dirname + '/public/index.html');
 })
 
-app.listen(39474, function () {
-   console.log('Example app listening on port 39474!')
+app.listen(4500, function () {
+   console.log('Example app listening on port 4500!')
 })
 
 //var WebSocketServer = require('ws').Server,
 const wss = new WebSocket.Server({port: 27403})
 let clients = {};
-//var msg = {};
+let channels = [];
 
 wss.on('connection', function (ws) {
 
@@ -47,8 +47,10 @@ wss.on('connection', function (ws) {
 
       let user = JSON.parse(message);
 
-
-    //  console.log(passwordHash.generate(user.password));
+      if(user.channel_name){
+        channels.push(user.channel_name);
+        console.log(channels);
+      }
 
       if(user.login || user.autorize){
 
@@ -63,25 +65,26 @@ wss.on('connection', function (ws) {
             db.users.find(({username: user.username},{password: user.password}),
               (function(err, result) {
                   if(err || result == ""){
-                    return ws.send("error");
+                    return ws.send("error_login");
                   }
-
-                    return ws.send(user.username);
+                    channels[0] = user.username;
+                    return ws.send(JSON.stringify(channels));
+                    //return ws.send(user.username);
                     //ws.close();
              }))
         }
-       }
-       else if(user.channel_id){
-
-          console.log(user.channel_id);
+      }else if(user.channel_id){
           clients[user.channel_id] = [];
-
-       }else{
-         if(typeof(user) == 'object'){
-           console.log(user.channel_id);
-
+          clients[user.channel_id].push(ws);
+          let i = user.username;
+          (clients[user.channel_id] || []).forEach((c, i) => {
+            if(c == ws){
+              return;
+            }
+            c.send(user.username + ": " + user.message );
+          })
+      }else{
            //clients[id].push(ws);
-
            var i = user.username;
            // for (var key in clients) {
            //    clients[key].send(message);
@@ -92,7 +95,7 @@ wss.on('connection', function (ws) {
             //   }
             //   c.send(user.username + ": " + user.message );
             // })
-         }
+
         }
 
          console.log(clients);
