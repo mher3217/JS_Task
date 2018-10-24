@@ -97,7 +97,6 @@
 			user_log.password = document.getElementById("password").value;
 			user_log.login = "login";
 			ws.send(JSON.stringify(user_log));
-						console.log(user_log);
 		}
 
 		function send_autorize(){
@@ -113,9 +112,10 @@
 
 		document.querySelector('#select_channels').addEventListener('click', function(e){
 			console.log('ok_channels');
-			user_msg.channel_id = e.target.id;
-			ws.send(JSON.stringify(user_msg));
+			channel.channel_id = e.target.id;
 
+
+			ws.send(JSON.stringify(channel));
 			document.getElementById("channels").style.display = "none";
 			document.getElementById("message").style.display = "block";
 
@@ -123,18 +123,20 @@
 
 		document.querySelector('#new_channel').addEventListener('click', function(e){
 				numm++;
+
 				(function tick(a) {
 
 					let node = document.createElement("a");
 					node.id = 'channelID' + numm;
+					channel.channel_id = node.id;
 					let textnode = document.createTextNode(a);
 					node.appendChild(textnode);
 					 document.getElementById("select_channels").appendChild(node);
 				})(document.getElementById("u_channel").value)
 
-				user_msg.channel_name = document.getElementById("u_channel").value;
-				ws.send(JSON.stringify(user_msg));
-				user_msg.channel_name = undefined;
+				channel.channel_name = document.getElementById("u_channel").value;
+				ws.send(JSON.stringify(channel));
+				channel.channel_name = undefined;
 		});
 
 		function message() {
@@ -147,7 +149,7 @@
 				node.appendChild(textnode);
 				 document.getElementById("demo").appendChild(node);
 			})(document.getElementById("t_message").value);
-		//	console.log(user);
+			console.log(user_msg);
 			ws.send(JSON.stringify(user_msg));
 		}
 
@@ -162,10 +164,11 @@
 			console.log("Server error_closed");
 		};
 		// event emmited when receiving message
-
 		ws.onmessage = function (ev) {
+			if(ws.data == 'error'){
+				return 'error!!!'
+			}
 			let channels_arr = JSON.parse(ev.data);
-
 			if(channels_arr[0] == document.getElementById("name").value){
 				for(let i = 1; i < channels_arr.length; i++){
 					(function tick(a) {
@@ -181,11 +184,10 @@
 				document.getElementById("registr").style.display = "none";
 				document.getElementById("channels").style.display = "block";
 
-			}else if(ev.data == "new_user"){
-				document.getElementById("registr").style.display = "none";
-				document.getElementById("channels").style.display = "block";
-				console.log("creat_new_user!!!!!");
-				// document.write("creat_new_user!!!!!");
+			}else if(JSON.parse(ev.data) == "new_user"){
+
+				document.write("creat_new_user!!!!!");
+
 			}else if(ev.data == "error"){
 				document.getElementById("errorMessage").style.display = "block";
 				console.log("can't find!!!");
