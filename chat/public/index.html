@@ -70,6 +70,7 @@
 	<div id="message" class="hinde">
 	    <input id="t_message" type="text" placeholder="message" >
 			<button id="submit_message" onclick="message()">Send</button>
+			<button id="back_channel" onclick="back_channel()">Back to channels menu</button>
 	</div>
 
 	<p id="errorMessage" class="hinde">please autorize</p>
@@ -105,7 +106,7 @@
 			user_auto.age = document.getElementById("a_age").value;
 			user_auto.autorize = "autorize";
 			ws.send(JSON.stringify(user_auto));
-			console.log(user_auto);
+
 		}
 
 		var numm = 0;
@@ -122,6 +123,9 @@
 		});
 
 		document.querySelector('#new_channel').addEventListener('click', function(e){
+			if(!document.getElementById("u_channel").value){
+				return console.log('error');
+			}
 				numm++;
 
 				(function tick(a) {
@@ -152,7 +156,10 @@
 			console.log(user_msg);
 			ws.send(JSON.stringify(user_msg));
 		}
-
+		function back_channel(){
+			document.getElementById("channels").style.display = "block";
+			document.getElementById("message").style.display = "none";
+		}
 		// event emmited when connected
 		ws.onopen = function () {
 				console.log('websocket is connected ...')

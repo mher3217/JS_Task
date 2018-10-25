@@ -46,7 +46,7 @@ wss.on('connection', function (ws) {
   ws.on('message', function (message) {
 
       let user = JSON.parse(message);
-
+      console.log(user.channel_id);
       if(user.channel_name){
         channels.push(user.channel_name);
         clients[user.channel_id] = [];
